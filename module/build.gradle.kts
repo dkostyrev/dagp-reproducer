@@ -99,16 +99,18 @@ androidComponents {
     }
   }
 
-  onVariants(selector().all()) {
-    it.artifacts
-      .forScope(ScopedArtifacts.Scope.PROJECT)
-      .use(tasks.register<SampleTransformTask>("sampleTransformTask"))
-      .toTransform(
-        type = ScopedArtifact.CLASSES,
-        inputJars = SampleTransformTask::jars,
-        inputDirectories = SampleTransformTask::dirs,
-        into = SampleTransformTask::output,
-      )
+  if (!properties.containsKey("doNotTransform")) {
+    onVariants(selector().all()) {
+      it.artifacts
+        .forScope(ScopedArtifacts.Scope.PROJECT)
+        .use(tasks.register<SampleTransformTask>("sampleTransformTask"))
+        .toTransform(
+          type = ScopedArtifact.CLASSES,
+          inputJars = SampleTransformTask::jars,
+          inputDirectories = SampleTransformTask::dirs,
+          into = SampleTransformTask::output,
+        )
+    }
   }
 }
 
